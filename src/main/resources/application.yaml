@@ -10,7 +10,40 @@ spring:
         max-attempts: 20
         max-interval: 15000
         initial-interval: 10000
+
+  eureka:
+    instance:
+      hostname: localhost
+
+
+# DOCKER
+#spring:
+#  application:
+#    name: ms-profile
+#  data:
+#    mongodb:
+#      host: mongodb
+#      port: 27017
+#      database: ms-profile
+#      repositories:
+#        enabled: true
 #
-#  eureka:
-#    instance:
-#      hostname: localhost
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+#
+#
+#server:
+#  port: ${PORT:0}
+#  error:
+#    include-message: always
+#
+##EUREKA CUSTOMER
+#
+#eureka:
+#  client:
+#    fetch-registry: true
+#    serviceUrl:
+#      defaultZone: http://registry-service:8889/eureka
+#  instance:
+#    instance-id: ${spring.application.name}:${random.value}
+#    prefer-ip-address: true
