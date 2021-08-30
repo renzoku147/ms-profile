@@ -1,8 +1,15 @@
-FROM openjdk:11.0.7
-ARG JAR_FILE=target/ms-profile-*.jar
+FROM maven:3.8.2-openjdk-11 AS build
+RUN mkdir -p /workspace
+WORKDIR /workspace
+COPY pom.xml /workspace
+COPY src /workspace/src
+RUN mvn -B package --file pom.xml -DskipTests
 
-ENV JAVA_OPTS="-Xms64m -Xmx256m"
+FROM adoptopenjdk/openjdk11
 
-COPY ${JAR_FILE} ms-profile.jar
-
-ENTRYPOINT java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -server -jar ms-profile.jar
+RUN adduser --system --group spring
+USER spring:spring
+EXPOSE 8890
+ARG JAR_FILE=/workspace/target/*.jar
+COPY --from=build ${JAR_FILE} app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
